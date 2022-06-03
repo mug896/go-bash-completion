@@ -16,6 +16,9 @@ _go()
     if [ "${CUR:0:1}" = "-" ]; then
         if [[ ${COMP_WORDS[1]} = "tool" && $COMP_CWORD -ge 3 ]]; then
             WORDS=$( eval "$HCMD2 |& $SED_OPT" )
+            [ "${COMP_WORDS[2]}" = "cgo" ] && { WORDS=${WORDS/--//}
+                WORDS=${WORDS/-fgo-pkgpath//} WORDS=${WORDS/-fgo-prefix//}
+            }
         else
             WORDS=$( eval "$HCMD |& $SED_OPT" )
             case ${COMP_WORDS[1]} in
