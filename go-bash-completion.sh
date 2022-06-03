@@ -17,7 +17,7 @@ _go()
         if [[ ${COMP_WORDS[1]} = "tool" && $COMP_CWORD -ge 3 ]]; then
             HCMD2=${HCMD2% tool vet*}$' tool vet help'
             WORDS=$( eval "$HCMD2 |& $SED_OPT" )
-            [ "${COMP_WORDS[2]}" = "cgo" ] && { WORDS=${WORDS/--/}
+            [ "${HCMD2% cgo*} cgo" = "$CMD tool cgo" ] && { WORDS=${WORDS/--/}
                 WORDS=${WORDS/-fgo-pkgpath/} WORDS=${WORDS/-fgo-prefix/} ;}
         else
             WORDS=$( eval "$HCMD |& $SED_OPT" )
