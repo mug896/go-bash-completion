@@ -15,9 +15,9 @@ _go()
 )
     if [ "${CUR:0:1}" = "-" ]; then
         if [[ ${COMP_WORDS[1]} = "tool" && $COMP_CWORD -ge 3 ]]; then
-            WORDS=$( $HCMD2 |& eval "$SED_OPT" )
+            WORDS=$( eval "$HCMD2" |& eval "$SED_OPT" )
         else
-            WORDS=$( $HCMD |& eval "$SED_OPT" )
+            WORDS=$( eval "$HCMD" |& eval "$SED_OPT" )
             case ${COMP_WORDS[1]} in
                 clean | get | install | list | run | test | vet)
                 WORDS=$WORDS$'\n'$( $CMD help build |& eval "$SED_OPT" ) ;;
@@ -31,10 +31,10 @@ _go()
                 if [[ $COMP_CWORD -eq 2 || ( $COMP_CWORD -eq 3 && $PREV = "-n" ) ]]; then
                     WORDS=$( $CMD tool )
                 else
-                    WORDS=$( $HCMD2 |& eval "$SED_CMD" )
+                    WORDS=$( eval "$HCMD2" |& eval "$SED_CMD" )
                 fi
             else
-                WORDS=$( $HCMD |& eval "$SED_CMD" )
+                WORDS=$( eval "$HCMD" |& eval "$SED_CMD" )
             fi
         fi
     fi
