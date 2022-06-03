@@ -10,7 +10,7 @@ _go()
     local SED_OPT=$( cat <<\@
             sed -En -e '1bZ' -e 's/^[[:blank:]]+(-[[:alnum:]_-]+).*/\1/; TB; p; b' \
                     -e ':B /^The -/!b; :X s/ flag/&/; TY; bZ; :Y N; bX' \
-                    -e ':Z s/(.*)([^[:alnum:]]-[[:alnum:]_-]+)(.*)/\2\n\1/; /-[[:alnum:]_-]+\n$/{ s/[^[:alnum:]\n_-]//gp; b}; tZ'
+                    -e ':Z s/(.*)([^[:alnum:]]-[[:alnum:]_-]+)(.*)/\2\n\1/; /-[[:alnum:]_-]+\n$/{ s/[^[:alnum:]\n_-]//g; p; b}; tZ'
 @
 )
     if [ "${CUR:0:1}" = "-" ]; then
