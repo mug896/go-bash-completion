@@ -15,7 +15,7 @@ _go()
 )
     if [ "${CUR:0:1}" = "-" ]; then
         if [[ ${COMP_WORDS[1]} = "tool" && $COMP_CWORD -ge 3 ]]; then
-            HCMD2=${HCMD2%tool vet*}$'tool vet help'
+            HCMD2=${HCMD2% tool vet*}$' tool vet help'
             WORDS=$( eval "$HCMD2 |& $SED_OPT" )
             [ "${COMP_WORDS[2]}" = "cgo" ] && { WORDS=${WORDS/--/}
                 WORDS=${WORDS/-fgo-pkgpath/} WORDS=${WORDS/-fgo-prefix/} ;}
@@ -34,7 +34,7 @@ _go()
                 if [[ $COMP_CWORD -eq 2 || ( $COMP_CWORD -eq 3 && $PREV = "-n" ) ]]; then
                     WORDS=$( $CMD tool )
                 else
-                    HCMD2=${HCMD2%tool vet*}$'tool vet help'
+                    HCMD2=${HCMD2% tool vet*}$' tool vet help'
                     WORDS=$( eval "$HCMD2 |& $SED_CMD" )
                 fi
             else
