@@ -15,26 +15,26 @@ _go()
 )
     if [ "${CUR:0:1}" = "-" ]; then
         if [[ ${COMP_WORDS[1]} = "tool" && $COMP_CWORD -ge 3 ]]; then
-            WORDS=$( eval "$HCMD2" |& eval "$SED_OPT" )
+            WORDS=$( eval "$HCMD2 |& $SED_OPT" )
         else
-            WORDS=$( eval "$HCMD" |& eval "$SED_OPT" )
+            WORDS=$( eval "$HCMD |& $SED_OPT" )
             case ${COMP_WORDS[1]} in
                 clean | get | install | list | run | test | vet)
-                WORDS=$WORDS$'\n'$( $CMD help build |& eval "$SED_OPT" ) ;;
+                WORDS=$WORDS$'\n'$( eval "$CMD help build |& $SED_OPT" ) ;;
             esac
         fi
     else
         if [ "$COMP_CWORD" -eq 1 ]; then
-            WORDS=$( $CMD help |& eval "$SED_CMD" )$' help'
+            WORDS=$( eval "$CMD help |& $SED_CMD" )$' help'
         else
             if [ "${COMP_WORDS[1]}" = "tool" ]; then
                 if [[ $COMP_CWORD -eq 2 || ( $COMP_CWORD -eq 3 && $PREV = "-n" ) ]]; then
                     WORDS=$( $CMD tool )
                 else
-                    WORDS=$( eval "$HCMD2" |& eval "$SED_CMD" )
+                    WORDS=$( eval "$HCMD2 |& $SED_CMD" )
                 fi
             else
-                WORDS=$( eval "$HCMD" |& eval "$SED_CMD" )
+                WORDS=$( eval "$HCMD |& $SED_CMD" )
             fi
         fi
     fi
