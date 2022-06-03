@@ -8,9 +8,9 @@ _go()
     local HCMD2=$( echo "${COMP_LINE% *}" | sed -En 's/'$CMD'\s+tool\s+-n\s+/'$CMD' tool /; s/\s+-.*$//; s/$/ --help/; p' );
     local SED_CMD='sed -En '\''/[Cc]ommands are:$/{ n; :X n; s/^[[:blank:]]*([^[:blank:]]+).*/\1/p; tX }'\'
     local SED_OPT=$( cat <<\@
-            sed -En -e '1bZ' -e 's/^[[:blank:]]+(-[[:alnum:]-]+).*/\1/; TB; p; b' \
+            sed -En -e '1bZ' -e 's/^[[:blank:]]+(-[[:alnum:]_-]+).*/\1/; TB; p; b' \
                     -e ':B /^The -/!b; :X s/ flag/&/; TY; bZ; :Y N; bX' \
-                    -e ':Z s/(.*)([^[:alnum:]]-[[:alnum:]-]+)(.*)/\2\n\1/; /-[[:alnum:]-]+\n$/{ s/[^[:alnum:]\n-]//gp; b}; tZ'
+                    -e ':Z s/(.*)([^[:alnum:]]-[[:alnum:]_-]+)(.*)/\2\n\1/; /-[[:alnum:]_-]+\n$/{ s/[^[:alnum:]\n_-]//gp; b}; tZ'
 @
 )
     if [ "${CUR:0:1}" = "-" ]; then
