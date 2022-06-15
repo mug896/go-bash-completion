@@ -4,8 +4,8 @@ _go()
     local CUR=${COMP_WORDS[COMP_CWORD]}
     local PREV=${COMP_WORDS[COMP_CWORD-1]}
     local IFS=$' \t\n' WORDS
-    local HCMD=$( echo ${COMP_LINE% *} | sed -En 's/ +-.*$//; s/^'$CMD' (help)?/'$CMD' help /; p' );
-    local HCMD2=$( echo ${COMP_LINE% *} | sed -En 's/^'$CMD' tool -n /'$CMD' tool /; s/ -.*$//; s/$/ --help/; p' );
+    local HCMD=$( echo ${COMP_LINE% *} | sed -En 's/ +-.*$//; s/^'"$CMD"' (help)?/'"$CMD"' help /; p' );
+    local HCMD2=$( echo ${COMP_LINE% *} | sed -En 's/^'"$CMD"' tool -n /'"$CMD"' tool /; s/ -.*$//; s/$/ --help/; p' );
     local SED_CMD='sed -En '\''/^((The )?[Cc]ommands are:|Registered analyzers:)$/{ n; :X n; s/^[[:blank:]]*([^[:blank:]]+).*/\1/p; tX }'\'
     local SED_OPT=$( cat <<\@
             sed -En -e '1bZ' -e 's/^[[:blank:]]+(-[[:alnum:]_-]+).*/\1/; TB; p; b' \
