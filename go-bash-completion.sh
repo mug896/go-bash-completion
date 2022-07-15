@@ -43,7 +43,6 @@ _go()
         fi
     fi
     COMPREPLY=( $(compgen -W "$WORDS" -- "$CUR") )
-    [ "${COMPREPLY: -1}" = "=" ] && compopt -o nospace
 }
 
 complete -o default -o bashdefault -F _go go
