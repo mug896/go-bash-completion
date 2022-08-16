@@ -11,8 +11,8 @@ _go()
                     -e ':Z s/(.*)([^[:alnum:]]-[[:alnum:]_-]+)(.*)/\2\n\1/; /-[[:alnum:]_-]+\n$/{ s/[^[:alnum:]\n_-]//g; p; b}; tZ'
 @
 )
-    if [ "${CUR:0:1}" = "-" ]; then
-        if [[ ${COMP_WORDS[1]} = "tool" && $COMP_CWORD -ge 3 ]]; then
+    if [[ ${CUR:0:1} == "-" ]]; then
+        if [[ ${COMP_WORDS[1]} == tool && $COMP_CWORD -ge 3 ]]; then
             HCMD2=${HCMD2%% tool vet*}$' tool vet help'
             WORDS=$( eval "$HCMD2 |& $SED_OPT" )
             [ "${HCMD2%% cgo*} cgo" = "$CMD tool cgo" ] && { WORDS=${WORDS/--/}
@@ -28,8 +28,8 @@ _go()
         if [ "$COMP_CWORD" -eq 1 ]; then
             WORDS=$( eval "$CMD help |& $SED_CMD" )$' help'
         else
-            if [ "${COMP_WORDS[1]}" = "tool" ]; then
-                if [[ $COMP_CWORD -eq 2 || ( $COMP_CWORD -eq 3 && $PREV = "-n" ) ]]; then
+            if [[ ${COMP_WORDS[1]} == tool ]]; then
+                if [[ $COMP_CWORD -eq 2 || ( $COMP_CWORD -eq 3 && $PREV == "-n" ) ]]; then
                     WORDS=$( $CMD tool )
                 else
                     HCMD2=${HCMD2%% tool vet*}$' tool vet help'
