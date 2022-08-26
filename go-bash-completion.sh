@@ -1,6 +1,7 @@
 _go() 
 {
-    local CMD=$1 CUR=$2 PREV=$3
+    local CMD=$1 CUR=${COMP_WORDS[COMP_CWORD]} PREV=${COMP_WORDS[COMP_CWORD-1]}
+    [[ ${COMP_LINE:COMP_POINT-1:1} = " " ]] && CUR=""
     local IFS=$' \t\n' WORDS
     local HCMD=$( echo ${COMP_LINE% *} | sed -En 's/ +-.*$//; s/^'"$CMD"' (help)?/'"$CMD"' help /; p' );
     local HCMD2=$( echo ${COMP_LINE% *} | sed -En 's/^'"$CMD"' tool -n /'"$CMD"' tool /; s/ -.*$//; s/$/ --help/; p' );
