@@ -7,10 +7,10 @@ _go()
     local HCMD2=$( echo ${COMP_LINE% *} | sed -En 's/^'"$CMD"' tool -n /'"$CMD"' tool /; s/ -.*$//; s/$/ --help/; p' );
     local SED_CMD='sed -En '\''/^((The )?[Cc]ommands are:|Registered analyzers:)$/{ n; :X n; s/^[[:blank:]]*([^[:blank:]]+).*/\1/p; tX }'\'
     local SED_OPT
-    IFS= read -rd '' SED_OPT <<\@
-            sed -En -e '1bZ' -e 's/^[[:blank:]]+(-[[:alnum:]_-]+).*/\1/; TB; p; b' \
-                    -e ':B /^The -/!b; :X s/ flag/&/; TY; bZ; :Y N; bX' \
-                    -e ':Z s/(.*)([^[:alnum:]]-[[:alnum:]_-]+)(.*)/\2\n\1/; /-[[:alnum:]_-]+\n$/{ s/[^[:alnum:]\n_-]//g; p; b}; tZ'
+    read -rd '' SED_OPT <<\@
+    sed -En -e '1bZ' -e 's/^[[:blank:]]+(-[[:alnum:]_-]+).*/\1/; TB; p; b' \
+        -e ':B /^The -/!b; :X s/ flag/&/; TY; bZ; :Y N; bX' \
+        -e ':Z s/(.*)([^[:alnum:]]-[[:alnum:]_-]+)(.*)/\2\n\1/; /-[[:alnum:]_-]+\n$/{ s/[^[:alnum:]\n_-]//g; p; b}; tZ'
 @
     if [[ ${CUR:0:1} == "-" ]]; then
         if [[ ${COMP_WORDS[1]} == tool && $COMP_CWORD -ge 3 ]]; then
