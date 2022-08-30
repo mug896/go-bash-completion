@@ -12,7 +12,7 @@ _go()
         -e ':B /^The -/!b; :X s/ flag/&/; TY; bZ; :Y N; bX' \
         -e ':Z s/(.*)([^[:alnum:]]-[[:alnum:]_-]+)(.*)/\2\n\1/; /-[[:alnum:]_-]+\n$/{ s/[^[:alnum:]\n_-]//g; p; b}; tZ'
 @
-    if [[ ${CUR:0:1} == "-" ]]; then
+    if [[ $CUR == -* ]]; then
         if [[ ${COMP_WORDS[1]} == tool && $COMP_CWORD -ge 3 ]]; then
             HCMD2=${HCMD2%% tool vet*}$' tool vet help'
             WORDS=$( eval "$HCMD2 |& $SED_OPT" )
