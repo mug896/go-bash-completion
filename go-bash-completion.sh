@@ -1,47 +1,47 @@
 _go() 
 {
-    local CMD=$1 CUR=${COMP_WORDS[COMP_CWORD]} PREV=${COMP_WORDS[COMP_CWORD-1]}
-    [[ ${COMP_LINE:COMP_POINT-1:1} = " " ]] && CUR=""
-    local IFS=$' \t\n' WORDS
-    local HCMD=$( echo ${COMP_LINE% *} | sed -En 's/ +-.*$//; s/^'"$CMD"' (help)?/'"$CMD"' help /; p' );
-    local HCMD2=$( echo ${COMP_LINE% *} | sed -En 's/^'"$CMD"' tool -n /'"$CMD"' tool /; s/ -.*$//; s/$/ --help/; p' );
-    local SED_CMD='sed -En '\''/^((The )?[Cc]ommands are:|Registered analyzers:)$/{ n; :X n; s/^[[:blank:]]*([^[:blank:]]+).*/\1/p; tX }'\'
-    local SED_OPT
-    read -rd '' SED_OPT <<\@
+    local cmd=$1 cur=${COMP_WORDS[COMP_CWORD]} prev=${COMP_WORDS[COMP_CWORD-1]}
+    [[ ${COMP_LINE:COMP_POINT-1:1} = " " ]] && cur=""
+    local IFS=$' \t\n' words
+    local hcmd=$( echo ${COMP_LINE% *} | sed -En 's/ +-.*$//; s/^'"$cmd"' (help)?/'"$cmd"' help /; p' );
+    local hcmd2=$( echo ${COMP_LINE% *} | sed -En 's/^'"$cmd"' tool -n /'"$cmd"' tool /; s/ -.*$//; s/$/ --help/; p' );
+    local sed_cmd='sed -En '\''/^((The )?[Cc]ommands are:|Registered analyzers:)$/{ n; :X n; s/^[[:blank:]]*([^[:blank:]]+).*/\1/p; tX }'\'
+    local sed_opt
+    read -rd '' sed_opt <<\@
     sed -En -e '1bZ' -e 's/^[[:blank:]]+(-[[:alnum:]_-]+).*/\1/; TB; p; b' \
         -e ':B /^The -/!b; :X s/ flag/&/; TY; bZ; :Y N; bX' \
         -e ':Z s/(.*)([^[:alnum:]]-[[:alnum:]_-]+)(.*)/\2\n\1/; /-[[:alnum:]_-]+\n$/{ s/[^[:alnum:]\n_-]//g; p; b}; tZ'
 @
-    if [[ $CUR == -* ]]; then
+    if [[ $cur == -* ]]; then
         if [[ ${COMP_WORDS[1]} == tool && $COMP_CWORD -ge 3 ]]; then
-            HCMD2=${HCMD2%% tool vet*}$' tool vet help'
-            WORDS=$( eval "$HCMD2 |& $SED_OPT" )
-            [ "${HCMD2%% cgo*} cgo" = "$CMD tool cgo" ] && { WORDS=${WORDS/--/}
-                WORDS=${WORDS/-fgo-pkgpath/} WORDS=${WORDS/-fgo-prefix/} ;}
+            hcmd2=${hcmd2%% tool vet*}$' tool vet help'
+            words=$( eval "$hcmd2 |& $sed_opt" )
+            [[ "${hcmd2%% cgo*} cgo" == "$cmd tool cgo" ]] && { words=${words/--/}
+                words=${words/-fgo-pkgpath/} words=${words/-fgo-prefix/} ;}
         else
-            WORDS=$( eval "$HCMD |& $SED_OPT" )
+            words=$( eval "$hcmd |& $sed_opt" )
             case ${COMP_WORDS[1]} in
                 clean | get | install | list | run | test | vet)
-                WORDS=$WORDS$'\n'$( eval "$CMD help build |& $SED_OPT" ) ;;
+                words=$words$'\n'$( eval "$cmd help build |& $sed_opt" ) ;;
             esac
         fi
     else
-        if [ "$COMP_CWORD" -eq 1 ]; then
-            WORDS=$( eval "$CMD help |& $SED_CMD" )$' help'
+        if (( COMP_CWORD == 1 )); then
+            words=$( eval "$cmd help |& $sed_cmd" )$' help'
         else
             if [[ ${COMP_WORDS[1]} == tool ]]; then
-                if [[ $COMP_CWORD -eq 2 || ( $COMP_CWORD -eq 3 && $PREV == "-n" ) ]]; then
-                    WORDS=$( $CMD tool )
+                if [[ $COMP_CWORD -eq 2 || ($COMP_CWORD -eq 3 && $prev == "-n") ]]; then
+                    words=$( $cmd tool )
                 else
-                    HCMD2=${HCMD2%% tool vet*}$' tool vet help'
-                    WORDS=$( eval "$HCMD2 |& $SED_CMD" )
+                    hcmd2=${hcmd2%% tool vet*}$' tool vet help'
+                    words=$( eval "$hcmd2 |& $sed_cmd" )
                 fi
             else
-                WORDS=$( eval "$HCMD |& $SED_CMD" )
+                words=$( eval "$hcmd |& $sed_cmd" )
             fi
         fi
     fi
-    COMPREPLY=( $(compgen -W "$WORDS" -- "$CUR") )
+    COMPREPLY=( $(compgen -W "$words" -- "$cur") )
 }
 
 complete -o default -o bashdefault -F _go go
