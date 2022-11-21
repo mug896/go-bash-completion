@@ -8,8 +8,8 @@ _go()
     local sed_cmd='sed -En '\''/^((The )?[Cc]ommands are:|Registered analyzers:)$/{ n; :X n; s/^[[:blank:]]*([^[:blank:]]+).*/\1/p; tX }'\'
     local sed_opt
     read -rd '' sed_opt <<\@
-    sed -En -e '1bZ' -e 's/^[[:blank:]]+(-[[:alnum:]_-]+).*/\1/; TB; p; b' \
-        -e ':B /^The -/!b; :X s/ flag/&/; TY; bZ; :Y N; bX' \
+    sed -En -e '1bZ' -e 's/^[[:blank:]]+(-[[:alnum:]_-]+).*/\1/; TX; p; b' \
+        -e ':X /^The -/!b; :Y s/ flag/&/; tZ; N; bY' \
         -e ':Z s/(.*)([^[:alnum:]]-[[:alnum:]_-]+)(.*)/\2\n\1/; /-[[:alnum:]_-]+\n$/{ s/[^[:alnum:]\n_-]//g; p; b}; tZ'
 @
     if [[ $cur == -* ]]; then
